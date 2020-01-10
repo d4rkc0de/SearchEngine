@@ -1,0 +1,4 @@
+cat dog file
+i love my dog
+today was a great day
+hello how are you ?
