@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class FilesHandler {
@@ -12,7 +13,7 @@ public class FilesHandler {
     static List<File> getFilesFromPath(String path) {
         List<File> files = new ArrayList<>();
         final File indexableDirectory = new File(path);
-        for (File file : indexableDirectory.listFiles()) {
+        for (File file : Objects.requireNonNull(indexableDirectory.listFiles())) {
             if (file.isFile()) {
                 files.add(file);
             }
