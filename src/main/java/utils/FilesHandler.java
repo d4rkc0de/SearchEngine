@@ -1,3 +1,5 @@
+package utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -10,7 +12,7 @@ import java.util.stream.Stream;
 
 public class FilesHandler {
 
-    static List<File> getFilesFromPath(String path) {
+    public static List<File> getFilesFromPath(String path) {
         List<File> files = new ArrayList<>();
         final File indexableDirectory = new File(path);
         for (File file : Objects.requireNonNull(indexableDirectory.listFiles())) {
@@ -21,7 +23,7 @@ public class FilesHandler {
         return files;
     }
 
-    static String readContentOfFile(String filePath) {
+    public static String readContentOfFile(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
         try (Stream<String> stream = Files.lines(Paths.get(filePath), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s).append(" "));

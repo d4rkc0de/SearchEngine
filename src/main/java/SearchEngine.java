@@ -1,40 +1,38 @@
-import java.io.BufferedReader;
+import algorithms.MapCountOccurrences;
+import utils.FilesHandler;
+
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static utils.IOHandler.readLine;
 
 public class SearchEngine {
 
-    private Map<String, Map<String, Integer>> wordsByFile = new HashMap<>();
 
-    public Map<String, Map<String, Integer>> getWordsByFile() {
-        return wordsByFile;
-    }
-
-    public void setWordsByFile(Map<String, Map<String, Integer>> wordsByFile) {
-        this.wordsByFile = wordsByFile;
-    }
+    private MapCountOccurrences mapCountOccurrences = new MapCountOccurrences();
 
     void run(String path) {
-        init(path);
+        preProcessing(path);
         while (true) {
             String line = readLine();
             String[] wordsToSearchFor = line.split(" ");
-            Map<String, Double> scores = getScores(wordsToSearchFor);
+            Map<String, Double> scores = getScoresUsingMapCountOccurrences(wordsToSearchFor);
             for (String fileName : scores.keySet()) {
                 System.out.println(fileName + ":" + scores.get(fileName));
             }
         }
     }
 
-    Map<String, Double> getScores(String[] wordsToSearchFor) {
+    Map<String, Double> getScoresUsingMapCountOccurrences(String[] wordsToSearchFor) {
         Map<String, Double> scores = new HashMap<>();
         double partScore = 100. / wordsToSearchFor.length;
-        for (String fileName : wordsByFile.keySet()) {
+        for (String fileName : mapCountOccurrences.getWordsByFile().keySet()) {
             double score = 0.0;
-            Map<String, Integer> countByWord = wordsByFile.get(fileName);
+            Map<String, Integer> countByWord = mapCountOccurrences.getWordsByFile().get(fileName);
             int occurences = 0;
             for (String wordToSearchFor : wordsToSearchFor) {
                 if (countByWord.containsKey(wordToSearchFor)) {
@@ -51,46 +49,15 @@ public class SearchEngine {
                         (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    private String readLine() {
-        System.out.print("search> ");
-        StringTokenizer tok = null;
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        while (tok == null || !tok.hasMoreTokens()) {
-            try {
-                tok = new StringTokenizer(in.readLine());
-            } catch (IOException e) {
-                System.err.println("Error while reading from input: " + e.getMessage());
-                return null;
-            }
-        }
-        return tok.nextToken();
-    }
-
-    void init(String path) {
+    void preProcessing(String path) {
         List<File> files = FilesHandler.getFilesFromPath(path);
         for (File file : files) {
-            handleFile(file);
+            // Occurrences count
+            mapCountOccurrences.addFileContent(file);
+
+            // Suffix Array
+            // TODO
         }
     }
-
-    void handleFile(File file) {
-        String fileContent = FilesHandler.readContentOfFile(file.getAbsolutePath());
-        String fileName = file.getName();
-        for (String word : fileContent.split(" ")) {
-            addWordToWordsByFile(fileName, word);
-        }
-    }
-
-    void addWordToWordsByFile(String fileName, String word) {
-        if (!wordsByFile.containsKey(fileName)) {
-            wordsByFile.put(fileName, new HashMap<>());
-        }
-        Map<String, Integer> countByWord = wordsByFile.get(fileName);
-        if (!countByWord.containsKey(word)) {
-            countByWord.put(word, 0);
-        }
-        countByWord.put(word, countByWord.get(word) + 1);
-    }
-
 
 }

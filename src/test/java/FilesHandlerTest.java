@@ -1,7 +1,9 @@
 import org.junit.Test;
+import utils.FilesHandler;
 
 import java.io.File;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FilesHandlerTest {

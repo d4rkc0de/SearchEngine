@@ -1,10 +1,8 @@
 package algorithms;
 
-import javafx.util.Pair;
-
 public class DynamicProgramming {
 
-    Pair<Integer, Integer> getLongestCommonSubsequence(String a, String b) {
+    static Integer[] getLongestCommonSubsequence(String a, String b) {
         Integer length = 0, startingIndexOfFirstString = 0;
         int n = a.length(), m = b.length();
         int dp[][] = new int[n + 1][m + 1];
@@ -19,6 +17,6 @@ public class DynamicProgramming {
                 }
             }
         }
-        return new Pair<>(length, startingIndexOfFirstString - length + 1);
+        return new Integer[]{length, length == 0 ? 0 : startingIndexOfFirstString - length + 1};
     }
 }
