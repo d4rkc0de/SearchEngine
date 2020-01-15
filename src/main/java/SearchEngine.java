@@ -1,4 +1,5 @@
 import algorithms.MapCountOccurrences;
+import algorithms.suffixArray.SuffixArrayByFile;
 import utils.FilesHandler;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public class SearchEngine {
 
 
     private MapCountOccurrences mapCountOccurrences = new MapCountOccurrences();
+    private SuffixArrayByFile suffixArrayByFile = new SuffixArrayByFile();
 
     void run(String path) {
         preProcessing(path);
@@ -22,7 +24,10 @@ public class SearchEngine {
             String[] wordsToSearchFor = line.split(" ");
             Map<String, Double> scores = getScoresUsingMapCountOccurrences(wordsToSearchFor);
             for (String fileName : scores.keySet()) {
-                System.out.println(fileName + ":" + scores.get(fileName));
+                System.out.println("- " + fileName);
+                System.out.println("    Rank using occurrences count: " + scores.get(fileName));
+                // TODO: Doesn't work as expected
+                System.out.println("    Rank using suffix array: " + suffixArrayByFile.getSuffixArrayByFile().get(fileName).rank(line));
             }
         }
     }
@@ -52,11 +57,15 @@ public class SearchEngine {
     void preProcessing(String path) {
         List<File> files = FilesHandler.getFilesFromPath(path);
         for (File file : files) {
+            // get File info
+            String fileName = file.getName();
+            String fileContent = FilesHandler.readContentOfFile(file.getAbsolutePath());
+
             // Occurrences count
-            mapCountOccurrences.addFileContent(file);
+            mapCountOccurrences.addFileContent(fileName, fileContent);
 
             // Suffix Array
-            // TODO
+            suffixArrayByFile.addFileContent(fileName, fileContent);
         }
     }
 

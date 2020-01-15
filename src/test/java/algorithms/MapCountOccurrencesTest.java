@@ -26,11 +26,9 @@ public class MapCountOccurrencesTest {
     public void testIfWordsFromFileAreAddedToWordsByFile() {
         //Given
         String fileName = "fileForTest1.txt";
-        File file = new File(
-                getClass().getClassLoader().getResource(fileName).getFile()
-        );
+        String fileContent = "dog cat dog";
         // When
-        mapCountOccurrences.addFileContent(file);
+        mapCountOccurrences.addFileContent(fileName, fileContent);
         //Then
         assertTrue(mapCountOccurrences.getWordsByFile().containsKey(fileName) &&
                 mapCountOccurrences.getWordsByFile().get(fileName).containsKey("dog") &&

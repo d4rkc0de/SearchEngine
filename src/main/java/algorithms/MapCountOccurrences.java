@@ -1,8 +1,5 @@
 package algorithms;
 
-import utils.FilesHandler;
-
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,9 +22,7 @@ public class MapCountOccurrences {
         return result;
     }
 
-    public void addFileContent(File file) {
-        String fileName = file.getName();
-        String fileContent = FilesHandler.readContentOfFile(file.getAbsolutePath());
+    public void addFileContent(String fileName, String fileContent) {
         Map<String, Integer> occurrencesCount = countOccurrences(fileContent);
         wordsByFile.put(fileName, occurrencesCount);
     }
